@@ -6,22 +6,30 @@ class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
         
-           vector<int> idxs;
-           if(s.empty() || s.length() < p.length()) return idxs;
-                      
-           sort(p.begin(),p.end());                     
-            
-           for(int i=0;i<=s.length()-p.length();i++){
-                   
-                   string str = s.substr(i,p.length());
-                   sort(str.begin(),str.end());
-                    // cout << str << ' ' ;
-                   
-                   if(str.compare(p) == 0) idxs.push_back(i);
-           }
-           
-           return idxs;
-    }
+        vector<int> res;
         
-    
+        map<char, int> p_hash;
+        for(int i=0; i<p.size(); i++)
+            p_hash[p[i]]++;
+        
+        map<char, int> hash;
+        for(int i=0; i<p.size(); i++)
+            hash[s[i]]++;
+        
+        int i = 0;
+        for(int j=p.size(); j<s.size(); j++){
+            
+            if(p_hash == hash){
+                res.push_back(i);
+            }
+            hash[s[i]]--;
+            if(hash[s[i]] < 1)
+                hash.erase(s[i]);
+            i++;
+            hash[s[j]]++;
+        }
+        if(hash == p_hash)
+            res.push_back(i);
+        return res;
+    }
 };
